@@ -34,7 +34,7 @@ If you want to run locally follow steps.
 ####  Clone project
 
 ```
-git clone git@https://tanja_brzak@bitbucket.org/tanja_brzak/issuetracker.git
+git clone https://github.com/tanjabrzak/issueTracker.git
 ```
 ####  Install dependencies
 
