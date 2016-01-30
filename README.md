@@ -5,9 +5,6 @@ Angular Web Client Application for issueTracker
 
 ----------
 
-### Table of contents
-
-[TOC]
 
 Requirements
 -------------
