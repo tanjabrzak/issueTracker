@@ -1,0 +1,148 @@
+<div class="row">
+    <div class="col-md-6">
+        <h3 class="form-title" ng-if="!issue.objectId">Create Issue</h3>
+        <h3 class="form-title" ng-if="issue.objectId">Update Issue</h3>
+    </div>
+    <div class="col-md-6">
+        <a href="#/issues/new" class="btn btn-info pull-right" role="button">
+            <span>Create issue</span>
+        </a>
+    </div>
+ </div>
+<form novalidate class="login-form" method="post" name="formIssue">
+    <div class="form-group" ng-class="{'has-error': formIssue.title.$invalid && submitted}">
+        <label class="control-label visible-ie8 visible-ie9">Title</label>
+        <div class="input-icon">
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Title" name="title" ng-model="issue.title" required
+            ng-disabled="edit"/>
+        </div>
+        <span class="help-block" ng-show="formIssue.title.$error.required && submitted">
+            *Required
+        </span>
+    </div>
+    <div class="form-group" ng-class="{'has-error': formIssue.description.$invalid && submitted}">
+        <label class="control-label visible-ie8 visible-ie9">Description</label>
+        <div class="input-icon" id="wig">
+            <textarea ng-wig="issue.description" placeholder="Description" name="description" required
+            ng-disabled="edit">
+                
+            </textarea>
+        </div>
+        <span class="help-block" ng-show="formIssue.description.$error.required && submitted">
+            *Required
+        </span>
+    </div>
+    <div class="form-group" ng-class="{'has-error': formIssue.assigneeid.$invalid && submitted}">
+        <label class="control-label visible-ie8 visible-ie9">Assignee</label>
+        <div class="input-icon">
+            <select data-ng-model="issue.assigneeid" class="form-control" name="assigneeid"
+                data-ng-options="assignee.objectId as assignee.name for assignee in assignees" required
+                ng-disabled="edit">
+            </select>
+        </div>
+		<span class="help-block" ng-show="formIssue.assigneeid.$error.required && submitted">
+            *Required
+        </span>
+    </div>
+    <div class="form-group" ng-class="{'has-error': formIssue.categoryid.$invalid && submitted}">
+        <label class="control-label visible-ie8 visible-ie9">Category</label>
+        <div class="input-icon">
+            <select data-ng-model="issue.categoryid" class="form-control" name="categoryid"
+                data-ng-options="category.objectId as category.name for category in categories" required
+                ng-disabled="edit">
+            </select>
+        </div>
+        <span class="help-block" ng-show="formIssue.categoryid.$error.required && submitted">
+            *Required
+        </span>
+    </div>
+    <div class="form-group" ng-class="{'has-error': formIssue.priority.$invalid && submitted}">
+        <label class="control-label visible-ie8 visible-ie9">Priority</label>
+        <div class="input-icon">
+            <select ng-model="issue.priority" class="form-control" ng-options="priority for priority in priorities" name="priority" required
+            ng-disabled="edit">
+            </select>
+        </div>
+        <span class="help-block" ng-show="formIssue.priority.$error.required && submitted">
+            *Required
+        </span>
+    </div>
+    <div class="form-group" ng-class="{'has-error': formIssue.status.$invalid && submitted}">
+        <label class="control-label visible-ie8 visible-ie9">Status</label>
+        <div class="input-icon">
+            <select ng-model="issue.status" class="form-control" ng-options="status for status in statuses" name="status" ng-init="'new'" 
+            required ng-disabled="new || edit">
+            </select>
+        </div>
+        <span class="help-block" ng-show="formIssue.status.$error.required && submitted">
+            *Required
+        </span>
+    </div>
+    <div class="form-group" ng-class="{'has-error': formIssue.estimation.$invalid && submitted}">
+        <label class="control-label visible-ie8 visible-ie9">Estimation</label>
+        <div class="input-icon">
+            <input class="form-control placeholder-no-fix" type="number" name="estimation" ng-model="issue.estimation" 
+            placeholder="Estimation (hours)" min="0" max="99" required
+            ng-disabled="edit">
+        </div>
+        <span class="help-block" ng-show="formIssue.estimation.$error.required && submitted">
+            *Required
+        </span>
+        <span class="help-block" ng-show="formIssue.estimation.$error.number && submitted">
+            *Not valid number
+        </span>
+        <span class="help-block" ng-show="formIssue.estimation.$error.min && submitted">
+            *Invalid number - min value exceeded (0)
+        </span>
+        <span class="help-block" ng-show="formIssue.estimation.$error.max && submitted">
+            *Invalid number - max value exceeded (99)
+        </span>
+    </div>
+    <div class="form-group" ng-class="{'has-error': formIssue.spent.$invalid && submitted}">
+        <label class="control-label visible-ie8 visible-ie9">Spent</label>
+        <div class="input-icon">
+            <input class="form-control placeholder-no-fix" type="number" name="spent" ng-model="issue.spent" 
+            placeholder="Spent (hours)" min="0" max="99" ng-disabled="!issue.objectId || edit" ng-required="issue.status === 'finished'">
+        </div>
+        <span class="help-block" ng-show="formIssue.spent.$error.required && submitted">
+            *Required
+        </span>
+        <span class="help-block" ng-show="formIssue.spent.$error.number && submitted">
+            *Not valid number
+        </span>
+        <span class="help-block" ng-show="formIssue.spent.$error.min && submitted">
+            *Invalid number - min value exceeded (0)
+        </span>
+        <span class="help-block" ng-show="formIssue.spent.$error.max && submitted">
+            *Invalid number - max value exceeded (99)
+        </span>
+    </div>
+    <div class="form-group" ng-class="{'has-error': formIssue.remaining.$invalid && submitted}">
+        <label class="control-label visible-ie8 visible-ie9">Remaining</label>
+        <div class="input-icon">
+            <input class="form-control placeholder-no-fix" type="number" name="remaining" ng-model="issue.remaining" 
+            placeholder="Remaining (hours)" min="0" max="99" disabled>
+        </div>
+        <span class="help-block" ng-show="formIssue.remaining.$error.required && submitted">
+            *Required
+        </span>
+        <span class="help-block" ng-show="formIssue.remaining.$error.number && submitted">
+            *Not valid number
+        </span>
+        <span class="help-block" ng-show="formIssue.remaining.$error.min && submitted">
+            *Invalid number - min value exceeded (0)
+        </span>
+        <span class="help-block" ng-show="formIssue.remaining.$error.max && submitted">
+            *Invalid number - max value exceeded (99)
+        </span>
+    </div>
+    <div class="form-actions  pull-right">
+        <button type="submit" class="btn btn-primary" ng-click="save(issue);"
+        ng-disabled="edit">
+            Save <i class="m-icon-swapright m-icon-white"></i>
+        </button>
+        <a class="cancel" href="#/issues/">Cancel</a>
+    </div>
+</form>
+
+

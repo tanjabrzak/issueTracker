@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col-md-2">
+        <h3>Kanban</h3>
+    </div>
+    <div class="col-md-8">
+        <form name="datepickerForm" class="form-inline" role="form">
+            <div class="form-group">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="fromDate" ng-model="fromDate" data-date-format="dd.MM.yyyy" placeholder="From" bs-datepicker 
+                        ng-required="!assigneeid && !priority || untilDate"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="untilDate" ng-model="untilDate" data-date-format="dd.MM.yyyy" placeholder="Until" bs-datepicker
+                        ng-required="!assigneeid && !priority || fromDate"/>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" name="priority" ng-model="priority" ng-required="!assigneeid && (!fromDate && !untilDate)">
+                        <option value="" selected="selected">Priority</option>
+                        <option value="high">high</option>
+                        <option value="medium">medium</option>
+                        <option value="low">low</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select ng-model="assigneeid" class="form-control" name="assigneeid"
+                        ng-options="assignee.objectId as assignee.name for assignee in assignees"
+                        ng-required="!priority && (!fromDate && !untilDate)">
+                        <option value="" selected="selected">Assignee</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-info" ng-click="show();" ng-disabled="datepickerForm.$invalid">
+                Show <i class="m-icon-swapright m-icon-white"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-2">
+        <a href="#/issues/new" class="btn btn-info pull-right" role="button">
+        <span>Create issue</span>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <table style="width:100%;border: 1px solid black;">
+        <tr style="background-color: #F4F4F4;">
+            <th style="border: 1px solid black;padding: 5px;">New</th>
+            <th style="border: 1px solid black;padding: 5px;">In progress</th>
+            <th style="border: 1px solid black;padding: 5px;">Finished</th>
+        </tr>
+        <tr>
+            <td style="vertical-align: text-top;border: 1px solid black;">
+                <div ng-repeat="issue in new_issues | orderBy:orderFunction">
+                    <div sticky-note issue="issue"></div>
+                </div>
+            </td>
+            <td style="vertical-align: text-top;border: 1px solid black;">
+                <div ng-repeat="issue in inprogress_issues | orderBy:orderFunction">
+                    <div sticky-note issue="issue"></div>
+                </div>
+            </td>
+            <td style="vertical-align: text-top;border: 1px solid black;">
+                <div ng-repeat="issue in finished_issues | orderBy:orderFunction">
+                    <div sticky-note issue="issue"></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Status:</h2>
+            <canvas id="pie" class="chart chart-pie" chart-data="statuses_data" chart-labels="statuses_labels" chart-legend="true" chart-colours="['#F7464A', '#F6E788', '#97BBCD']"
+                chart-click="onClickStatus">
+            </canvas>
+        </div>
+        <div class="col-md-6">
+            <h2>Priority:</h2>
+            <canvas id="pie" class="chart chart-pie" chart-data="priorities_data" chart-labels="priorities_labels" chart-legend="true" chart-colours="['#EC4F4F', '#F6E788', '#ECE3E3']"
+                chart-click="onClickPriority">
+            </canvas>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="box_itm rounded" ng-style="priorityStyle" ng-click="show_issue()">
+    <div ng-bind=issue.title></div>
+    <hr/>
+    <div id="resp1" class="name">{{issue.assignee_id.first_name}} {{issue.assignee_id.last_name}}</div>
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100" style="width:{{progress}}%">
+            <span class="sr-only">{{progress}}% Complete</span>
+        </div>
+    </div>
+</div>

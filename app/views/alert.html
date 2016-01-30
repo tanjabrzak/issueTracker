@@ -1,0 +1,28 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-ng-click="$hide()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div 
+                style="
+                    text-align: center;
+                ">
+                    <span class="round-circle">
+                        <span ng-switch="alertCtrl.type">
+                            <i ng-switch-when="default" class="fa fa-info"></i>
+                            <i ng-switch-when="success" class="fa fa-check"></i>
+                            <i ng-switch-when="warning" class="fa fa-exclamation-triangle"></i>
+                            <i ng-switch-when="danger" class="fa fa-exclamation"></i>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p class="text-center" ng-class="text" ng-bind="alertCtrl.message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-ng-click="$hide()">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
