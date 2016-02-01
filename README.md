@@ -1,7 +1,7 @@
 issueTracker
 ===================
 
-Angular Web Client Application for issueTracker
+Angular Web Client Application for issueTracker (Parse REST API backend https://parse.com/docs/rest/guide)
 
 ----------
 
