@@ -3,6 +3,8 @@ issueTracker
 
 Angular Web Client Application for issueTracker (Parse REST API backend https://parse.com/docs/rest/guide)
 
+**Update 7 Jun 2016:** Migration to Backendless: https://github.com/tanjabrzak/issueTracker/tree/backendless
+
 ----------
 
 
