@@ -1,7 +1,7 @@
 issueTracker
 ===================
 
-Angular Web Client Application for issueTracker (Parse REST API backend https://parse.com/docs/rest/guide)
+Angular Web Client Application for issueTracker (Backendless REST API backend https://backendless.com/documentation/users/rest/users_overview.htm)
 
 ----------
 
@@ -59,6 +59,12 @@ bower install
 ####  Configure
 ```
 Copy secret_example.json to secret.json and configure
+```
+----------
+
+####  Import data
+```
+Import data from migration-data.zip. In Backendless Dashboard -> Data -> Issue table check Issue.assignee_id and Issue.category_id relationship to autoload.
 ```
 ----------
 

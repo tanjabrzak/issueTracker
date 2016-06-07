@@ -11,16 +11,16 @@ app
 .controller('KanbanCtrl', ['$scope','API','growl','$location', function($scope,API,growl,$location) {
 
 
-    var where = {},
+    var where = "",whereStr="",
         include = 'assignee_id,category_id,creator_id';
 
     $scope.priorities_labels = ['high','medium','low'];
 	$scope.statuses_labels = ['new','in progress','finished'];
 
-	API('classes/Employee').get().$promise
+	API('data/Employee').get().$promise
 	.then(
 		function(response){
-			$scope.assignees = response.results;
+			$scope.assignees = response.data;
 			angular.forEach($scope.assignees, function (data) {
 				data.name = data.first_name + ' ' + data.last_name;
 			});
@@ -33,35 +33,48 @@ app
     var load_status = function () {
 
     	$scope.loaded = false;
+		whereStr = where;
+    	where = "status='new'";
+		if (whereStr.length===0) {
+			where = "status='new'";
+		} else {
+			where=whereStr+' AND '+"status='new'";
+		}
 
-    	where.status = 'new';
-
-    	API('classes/Issue').get({include:include,where:where}).$promise
+    	API('data/Issue').get({where:where}).$promise
 		.then(
 			function(response){
-				$scope.new_issues = response.results;
+				$scope.new_issues = response.data;
 			},
 			function(error){
 				growl.addErrorMessage(error.data.error);
 			}
 		)
 		.then(function () {
-			where.status = 'in progress';
-			API('classes/Issue').get({include:include,where:where}).$promise
+			if (whereStr.length===0) {
+				where = "status='in progress'";
+			} else {
+				where=whereStr+' AND '+"status='in progress'";
+			}
+			API('data/Issue').get({where:where}).$promise
 			.then(
 				function(response){
-					$scope.inprogress_issues = response.results;
+					$scope.inprogress_issues = response.data;
 				},
 				function(error){
 					growl.addErrorMessage(error.data.error);
 				}
 			)
 			.then(function () {
-				where.status = 'finished';
-				API('classes/Issue').get({include:include,where:where}).$promise
+				if (whereStr.length===0) {
+					where = "status='finished'";
+				} else {
+					where=whereStr+' AND '+"status='finished'";
+				}
+				API('data/Issue').get({where:where}).$promise
 				.then(
 					function(response){
-						$scope.finished_issues = response.results;
+						$scope.finished_issues = response.data;
 						$scope.loaded = true;
 					},
 					function(error){
@@ -93,7 +106,7 @@ app
 
     $scope.show = function () {
 
-    	where = {};
+    	where = '';
 
     	if ($scope.fromDate && $scope.untilDate) {
     		var  createdAt = {
@@ -107,18 +120,33 @@ app
 						    }
 						};
 
-			where.createdAt = createdAt;
+			if (where.length===0) {
+				where='created>='+"'"+$scope.fromDate.toLocaleDateString()+"' AND created<="+"'"+$scope.untilDate.toLocaleDateString()+"'";
+			} else {
+				where=where+' AND '+'created>='+"'"+$scope.fromDate.toLocaleDateString()+"' AND created<="+"'"+$scope.untilDate.toLocaleDateString()+"'";
+			}
+			//where.createdAt = createdAt;
 			/*$scope.fromDate = null;
 			$scope.untilDate = null;*/
     	}
 
     	if ($scope.priority) {
-			where.priority = $scope.priority;
+			if (where.length===0) {
+				where='priority='+"'"+$scope.priority+"'";
+			} else {
+				where=where+' AND '+'priority='+"'"+$scope.priority+"'";
+			}
+			//where.priority = $scope.priority;
 			/*$scope.priority = null;*/
     	}
 
     	if ($scope.assigneeid) {
-			where.assigneeid = $scope.assigneeid;
+			if (where.length===0) {
+				where='assigneeid='+"'"+$scope.assigneeid+"'";
+			} else {
+				where=where+' AND '+'assigneeid='+"'"+$scope.assigneeid+"'";
+			}
+			//where.assigneeid = $scope.assigneeid;
 			/*$scope.assigneeid = null;*/
     	}
 
@@ -132,33 +160,33 @@ app
 
 			$scope.statuses_data = [$scope.new_issues.length,$scope.inprogress_issues.length,$scope.finished_issues.length];
 			delete where.status;
-			where.priority = 'high';
-			API('classes/Issue').get({where:where,count:1,limit:0}).$promise
+			where = "priority='high'"; 
+			API('data/Issue').get({where:where,pageSize:1}).$promise
 			.then(
 				function(response){
-					$scope.priority_high = response.count;
+					$scope.priority_high = response.totalObjects;
 				},
 				function(error){
 					growl.addErrorMessage(error.data.error);
 				}
 			)
 			.then(function () {
-				where.priority = 'medium';
-				API('classes/Issue').get({where:where,count:1,limit:0}).$promise
+				where = "priority='medium'"; 
+				API('data/Issue').get({where:where,pageSize:1}).$promise
 				.then(
 					function(response){
-						$scope.priority_medium = response.count;
+						$scope.priority_medium = response.totalObjects;
 					},
 					function(error){
 						growl.addErrorMessage(error.data.error);
 					}
 				)
 				.then(function () {
-					where.priority = 'low';
-					API('classes/Issue').get({where:where,count:1,limit:0}).$promise
+					where = "priority='low'"; 
+					API('data/Issue').get({where:where,pageSize:1}).$promise
 					.then(
 						function(response){
-							$scope.priority_low = response.count;
+							$scope.priority_low = response.totalObjects;
 						},
 						function(error){
 							growl.addErrorMessage(error.data.error);

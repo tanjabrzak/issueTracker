@@ -12,9 +12,8 @@ app
     return function(entity){
 		var apiEndpoint = ENV.apiEndpoint;
 		var headers = {
-			'X-Parse-Application-Id': ENV.appId,
-			'X-Parse-REST-API-Key': ENV.appKey,
-			'Content-Type': 'application/json'
+			'application-id': ENV.appId,
+			'secret-key': ENV.appKey
 		};
         return $resource(
 		apiEndpoint + entity + '/:id/:action', 

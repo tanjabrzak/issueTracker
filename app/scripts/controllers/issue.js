@@ -10,20 +10,20 @@
 app
 .controller('IssueCtrl', ['$scope','API','growl','$routeParams','$location','$timeout', function($scope,API,growl,$routeParams,$location,$timeout) {
 
-	API('classes/Category').get().$promise
+	API('data/Category').get().$promise
 	.then(
 		function(response){
-			$scope.categories = response.results;
+			$scope.categories = response.data;
 		},
 		function(error){
 			growl.addErrorMessage(error.data.error);
 		}
 	);
 
-	API('classes/Employee').get().$promise
+	API('data/Employee').get().$promise
 	.then(
 		function(response){
-			$scope.assignees = response.results;
+			$scope.assignees = response.data;
 			angular.forEach($scope.assignees, function (data) {
 				data.name = data.first_name + ' ' + data.last_name;
 			});
@@ -37,7 +37,7 @@ app
 
 		var include = 'assignee_id,category_id,creator_id';
 
-		API('classes/Issue/'+$routeParams.id).get({include:include}).$promise
+		API('data/Issue/'+$routeParams.id).get().$promise
 		.then(
 			function(response){
 				$scope.issue = response;
@@ -82,9 +82,9 @@ app
 		
 		if ($scope.formIssue.$valid) {
 
-			issue.assignee_id = {__type:'Pointer',className:'Employee','objectId':issue.assigneeid};
+			issue.assignee_id = {__type:'Pointer',className:'Employee','objectId':issue.assigneeid,___class:'Employee'};
 
-			issue.category_id = {__type:'Pointer',className:'Category','objectId':issue.categoryid};
+			issue.category_id = {__type:'Pointer',className:'Category','objectId':issue.categoryid,___class:'Category'};
 
 			issue.creator_id = null;
 
@@ -104,7 +104,7 @@ app
 			delete issue.name;
 
 			if (!$routeParams.id) {
-				API('classes/Issue').post(issue).$promise
+				API('data/Issue').post(issue).$promise
 				.then(
 					function(response){
 						alert('Successfully saved','success');
@@ -120,7 +120,7 @@ app
 					alert('Please enter spent time');
 					return;
 				}
-				API('classes/Issue/'+$routeParams.id).put(issue).$promise
+				API('data/Issue/'+$routeParams.id).put(issue).$promise
 				.then(
 					function(){
 						alert('Successfully saved','success');

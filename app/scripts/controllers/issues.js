@@ -12,12 +12,25 @@ app
 
  	var load = function () {
  		var include = 'assignee_id,category_id,creator_id';
-
- 		API('classes/Issue').get({include:include,where:$routeParams}).$promise
+		console.log($routeParams);
+		var whereStr="";
+		var p = $routeParams;
+		for (var prop in p) {
+			if (p.hasOwnProperty(prop)) {
+				if (whereStr.length===0) {
+					whereStr=prop+'='+"'"+p[prop]+"'";
+				} else {
+					whereStr=whereStr+' AND '+prop+'='+"'"+p[prop]+"'";
+				}
+			}
+			
+		}
+		console.log(whereStr);
+ 		API('data/Issue').get({where:whereStr}).$promise //{include:include,where:$routeParams}
 		.then(
 			function(response){
 				$scope.issues = [];
-				angular.forEach(response.results,function(data){
+				angular.forEach(response.data,function(data){
 					$scope.issues.push({
 						name: data.assignee_id.first_name + ' ' + data.assignee_id.last_name,
 						created: data.createdAt,
